@@ -886,10 +886,14 @@ Jalankan:
 ```
 ./kernel.sh
 ```
+![App Screenshot](https://github.com/nadyaaee/SISOP-5-2026-IT-013/blob/main/soal_1/Assets/kernel.png?raw=true)
+
 Jalankan:
 ```
 ./single.sh
 ```
+![App Screenshot](https://github.com/nadyaaee/SISOP-5-2026-IT-013/blob/main/soal_1/Assets/single.png?raw=true)
+
 Jalankan:
 ```
 ./multi.sh
@@ -898,21 +902,30 @@ atau
 ```
 sudo ./multi.sh
 ```
+![App Screenshot](https://github.com/nadyaaee/SISOP-5-2026-IT-013/blob/main/soal_1/Assets/multi.png?raw=true)
+
 Jalankan:
 ```
 ./iso.sh
 ```
+![App Screenshot](https://github.com/nadyaaee/SISOP-5-2026-IT-013/blob/main/soal_1/Assets/iso.png?raw=true)
 
 Tes
 ```
 ./qemu.sh --single
 ```
+![App Screenshot](https://github.com/nadyaaee/SISOP-5-2026-IT-013/blob/main/soal_1/Assets/qemu-single.png?raw=true)
+
 ```
 ./qemu.sh --multi
 ```
+![App Screenshot](https://github.com/nadyaaee/SISOP-5-2026-IT-013/blob/main/soal_1/Assets/qemu-multi.png?raw=true)
+
 ```
 ./qemu.sh --all
 ```
+![App Screenshot](https://github.com/nadyaaee/SISOP-5-2026-IT-013/blob/main/soal_1/Assets/qemu-all.png?raw=true)
+
 Keluar dari QEMU:
 ```
 Ctrl + A lalu X
@@ -922,6 +935,8 @@ Jalankan:
 ```
 ./backup.sh
 ```
+![App Screenshot](https://github.com/nadyaaee/SISOP-5-2026-IT-013/blob/main/soal_1/Assets/backup.png?raw=true)
+
 
 #### Tes Akses Folder
 Untuk tes user lain, harus logout dulu.
@@ -1061,3 +1076,4 @@ single.gz
 multi.gz
 farewell.iso
 ```
+![App Screenshot](https://github.com/nadyaaee/SISOP-5-2026-IT-013/blob/main/soal_1/Assets/isi-zip.png?raw=true)
