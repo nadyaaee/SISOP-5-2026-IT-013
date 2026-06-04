@@ -262,6 +262,7 @@ echo "Single filesystem selesai: osboot/single.gz"
 Menampilkan pesan bahwa proses pembuatan single filesystem berhasil dan file hasilnya tersimpan pada `osboot/single.gz`.
 
 ### Isi `multi.sh`
+Script yang digunakan untuk membuat filesystem multi-user menggunakan BusyBox. Selain membuat struktur direktori dasar, script ini juga menambahkan beberapa akun pengguna yaitu `root`, `henn`, `hann`, `viii`, dan `kids` beserta password dan hak akses masing-masing. Hasil akhirnya berupa file `multi.gz`.
 ```
 #!/bin/bash
 set -e
@@ -553,6 +554,7 @@ Menampilkan pesan bahwa proses pembuatan multi filesystem berhasil dan file hasi
 
 
 ### Isi `iso.sh`
+Script yang digunakan untuk membuat file ISO bootable. Script ini menggabungkan kernel (`bzImage`) dan filesystem (`single.gz` dan `multi.gz`) ke dalam image ISO sehingga sistem operasi dapat dijalankan melalui menu boot. Hasilnya adalah file `farewell.iso`.
 ```
 #!/bin/bash
 set -e
@@ -664,6 +666,10 @@ echo "ISO selesai dibuat: osboot/farewell.iso"
 ```
 Menampilkan pesan bahwa proses pembuatan file ISO berhasil dan hasilnya tersimpan pada `osboot/farewell.iso`.
 ### Isi `qemu.sh`
+Script yang digunakan untuk menjalankan sistem operasi menggunakan QEMU. Script ini menyediakan tiga mode boot:
+- --single → menjalankan filesystem single-user.
+- --multi → menjalankan filesystem multi-user.
+- --all → menjalankan file ISO dan menampilkan menu boot.
 
 ```
 #!/bin/bash
@@ -815,7 +821,7 @@ Menampilkan petunjuk penggunaan script beserta daftar argumen yang tersedia.
 Script ini berfungsi untuk menjalankan sistem operasi menggunakan QEMU dalam tiga mode, yaitu Single User, Multi User, dan Boot melalui ISO (GRUB Menu).
 
 ### Isi `backup.sh`
-
+Script yang digunakan untuk membuat arsip backup dari seluruh hasil build. File yang dibackup meliputi `bzImage`, `single.gz`, `multi.gz`, dan `farewell.iso`. Hasil backup disimpan dalam format ZIP dengan nama `farewell_backup_[DDMMYYYY-HHMMSS].zip`.
 ```
 #!/bin/bash
 set -e
@@ -918,15 +924,19 @@ Jalankan:
 ```
 
 #### Tes Akses Folder
-Contoh saat login sebagai `kids`:
+Untuk tes user lain, harus logout dulu.
 ```
-cd /home/kids
-touch test.txt
-cd /root
+exit
 ```
-Harusnya `/root` tidak bisa diakses.
 
-Contoh saat login sebagai `root`:
+1. Test root bisa akses semua
+
+Login:
+```
+root
+root123
+```
+Tes:
 ```
 cd /root
 cd /home/henn
@@ -934,7 +944,120 @@ cd /home/hann
 cd /home/viii
 cd /home/kids
 ```
-Root bisa akses semua.
+Expected: semua berhasil.
 
+2. Test user henn
 
+Login:
+```
+henn
+henn123
+```
+Tes:
+```
+whoami
+cd /home/henn
+touch test.txt
+```
+Expected:
+```
+henn
+```
+dan file berhasil dibuat.
 
+Lalu:
+```
+cd /root
+```
+Expected:
+```
+Permission denied
+```
+
+3. Test user hann
+
+Login:
+```
+hann
+hann123
+```
+Tes:
+```
+cd /home/hann
+cd /home/viii
+cd /home/kids
+```
+Expected: berhasil.
+
+Tes:
+```
+cd /home/henn
+cd /root
+```
+Expected: gagal.
+
+4. Test user viii
+
+Login:
+```
+viii
+viii123
+```
+Tes:
+```
+cd /home/viii
+cd /home/kids
+```
+Expected: berhasil.
+
+Tes:
+```
+cd /home/henn
+cd /home/hann
+cd /root
+```
+Expected: gagal.
+
+5. Test user kids
+
+Login:
+```
+kids
+kids123
+```
+Tes:
+```
+cd /home/kids
+```
+Expected: berhasil.
+
+Tes:
+```
+cd /home/henn
+cd /home/hann
+cd /home/viii
+cd /root
+```
+Expected: gagal.
+
+6. Test folder `/tmp`
+
+Semua user:
+```
+cd /tmp
+touch coba.txt
+ls
+```
+Expected: berhasil karena soal menyebut semua user full access ke `/tmp`.
+
+#### Tes Isi Backup 
+```
+unzip -l osboot/farewell_backup_*.zip
+```
+Expected ada:
+```
+bzImage
+single.gz
+multi.gz
+farewell.iso
+```
